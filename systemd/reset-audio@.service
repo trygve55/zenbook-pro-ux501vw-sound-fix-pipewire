@@ -6,9 +6,9 @@ After=sleep.target
 
 [Service]
 Type=oneshot
-ExecStartPre=/bin/runuser -l %i -c 'export DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}; systemctl --user stop pulseaudio.s*'
+ExecStartPre=runuser -l %i -c 'export DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}; systemctl --user stop pipewire.s*'
 ExecStart=/bin/sh ${DIR}/reconfig.sh ${DIR}/user_pin_configs
-ExecStartPost=/bin/runuser -l %i -c 'export DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}; systemctl --user start pulseaudio.service'
+ExecStartPost=runuser -l %i -c 'export DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}; systemctl --user start pipewire.service'
 User=root
 
 [Install]

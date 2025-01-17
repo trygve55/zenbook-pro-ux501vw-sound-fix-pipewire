@@ -13,13 +13,11 @@ PATH=$DIR:$PATH
 USER_PIN_PATH=$DIR/user_pin_configs
 
 function stop_pulse {
-    systemctl --user stop pipewire-pulse.socket
-    systemctl --user stop pipewire.socket
+    systemctl --user stop pipewire.s*
 }
 
 function start_pulse {
     systemctl --user start pipewire.service
-    systemctl --user start pipewire-pulse.service
 }
 
 systemctl --user status pipewire.service &>/dev/null
