@@ -13,42 +13,22 @@ PATH=$DIR:$PATH
 USER_PIN_PATH=$DIR/user_pin_configs
 
 function stop_pulse {
-    if [ "$1" = true ]; then
-        systemctl --user stop pulseaudio.s*
-    else
-        CONFIG_FILE=$HOME/.config/pulse/client.conf
-        BACKUP_FILE=$CONFIG_FILE.ux501vw.backup
-        if [ -f $CONFIG_FILE ]; then
-            mv $CONFIG_FILE $BACKUP_FILE
-        fi
-        echo autospawn = no > $CONFIG_FILE
-        pulseaudio --kill
-        rm $CONFIG_FILE
-        if [ -f $BACKUP_FILE ]; then
-            mv $BACKUP_FILE $CONFIG_FILE
-        fi
-    fi
+    systemctl --user stop pipewire-pulse.socket
+    systemctl --user stop pipewire.socket
 }
 
 function start_pulse {
-    if [ "$1" = true ]; then
-        systemctl --user start pulseaudio
-    else
-        pulseaudio --start
-    fi
+    systemctl --user start pipewire.service
+    systemctl --user start pipewire-pulse.service
 }
 
-pulseaudio --check &>/dev/null
-[ $? -eq 0 ] && WAS_PULSE_ON=true || WAS_PULSE_ON=false
+systemctl --user status pipewire.service &>/dev/null
+[ $? -eq 0 ] && WAS_PIPEWIRE_ON=true || WAS_PIPEWIRE_ON=false
 
-systemctl --user status pulseaudio.service &>/dev/null
-[ $? -eq 0 ] && WAS_ON_SYSTEMD=true || WAS_ON_SYSTEMD=false
-
-
-if [ "$WAS_PULSE_ON" = true ]; then
-    stop_pulse $WAS_ON_SYSTEMD
-    sudo bash -c "reconfig.sh $USER_PIN_PATH"
-    start_pulse $WAS_ON_SYSTEMD
+if [ "$WAS_PIPEWIRE_ON" = true ]; then
+    stop_pulse
+    sudo "PATH=$PATH" bash -c "reconfig.sh $USER_PIN_PATH"
+    start_pulse
 else
-    sudo bash -c "reconfig.sh $USER_PIN_PATH"
+    sudo "PATH=$PATH" bash -c "reconfig.sh $USER_PIN_PATH"
 fi
