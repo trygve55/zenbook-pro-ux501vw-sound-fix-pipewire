@@ -1,6 +1,6 @@
-# zenbook-pro-ux501vw-sound-fix
+# zenbook-pro-ux501vw-sound-fix-pipewire
 
-This repository contains scripts aiming to fix the white noise after suspend issue with the Asus Zenbook Pro UX501VW.
+This repository contains scripts aiming to fix the white noise after suspend issue with the Asus Zenbook Pro UX501VW. This for is for setups using pipewire.
 
 The proposed solution automates [this approach](https://askubuntu.com/q/884051).
 
